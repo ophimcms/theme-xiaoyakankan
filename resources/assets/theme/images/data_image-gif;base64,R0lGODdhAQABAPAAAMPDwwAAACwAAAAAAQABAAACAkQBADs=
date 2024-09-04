@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1, minimum-scale=1, width=device-width">
+<title>404 not found</title>
+<script>
+window.setTimeout(function() {
+  window.location.pathname !== '/' && (window.location.href = '/');
+}, 1000);
+</script>
+</head>
+<body>
+<p>Oops! We couldn't find your page. <a href="/">Go back to Home</a><p>
+<p>糟糕！ 我们找不到您的页面。<a href="/">返回首页</a> <p>
+<p>糟糕！我們找不到您的頁面。<a href="/">返回首頁</a> <p>
+<p>おっと！ ページが見つかりませんでした。<a href="/">ホームに戻る</a> <p>
+</body>
+</html>

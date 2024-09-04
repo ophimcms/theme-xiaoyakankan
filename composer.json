@@ -1,0 +1,32 @@
+{
+    "name": "ophimcms/theme-xiaoyakankan",
+    "description": "Ophim's xiaoyakankan theme",
+    "type": "library",
+    "authors": [
+        {
+            "name": "ophimcms",
+            "email": "dev@ophim.cc"
+        }
+    ],
+    "require": {
+        "laravel/framework": "^6|^7|^8",
+        "ckfinder/ckfinder-laravel-package": "v3.5.2.1",
+        "hacoidev/ophim-core": "^1.0.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ophim\\Themexiaoyakankan\\": "src/",
+            "Ophim\\Themexiaoyakankan\\Database\\Factories\\": "database/factories/",
+            "Ophim\\Themexiaoyakankan\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ophim\\Themexiaoyakankan\\ThemexiaoyakankanServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}
