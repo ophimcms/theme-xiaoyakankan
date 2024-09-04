@@ -1,37 +1,4 @@
 @extends('themes::themexiaoyakankan.layout')
-@php
-    $tops = Cache::remember('site.movies.tops', setting('site_cache_ttl', 5 * 60), function () {
-       $lists = preg_split('/[\n\r]+/', get_theme_option('hotest'));
-       $data = [];
-       foreach ($lists as $list) {
-           if (trim($list)) {
-               $list = explode('|', $list);
-               [$label, $relation, $field, $val, $sortKey, $alg, $limit, $template] = array_merge($list, ['Phim hot', '', 'type', 'series', 'view_total', 'desc', 4, 'top_thumb']);
-               try {
-                   $data[] = [
-                       'label' => $label,
-                       'template' => $template,
-                       'data' => \Ophim\Core\Models\Movie::when($relation, function ($query) use ($relation, $field, $val) {
-                           $query->whereHas($relation, function ($rel) use ($field, $val) {
-                               $rel->where($field, $val);
-                           });
-                       })
-                           ->when(!$relation, function ($query) use ($field, $val) {
-                               $query->where($field, $val);
-                           })
-                           ->orderBy($sortKey, $alg)
-                           ->limit($limit)
-                           ->get(),
-                   ];
-               } catch (\Exception $e) {
-                   # code
-               }
-           }
-       }
-
-       return $data;
-   });
-@endphp
 @section('content')
 
     <style>
@@ -51,157 +18,108 @@
             cursor: pointer !important;
         }
     </style>
-    <nav class="bg-page">
-        <ul id="breadcrumb" itemscope="itemscope" itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope="itemscope" itemtype="https://schema.org/ListItem"><a href="/"
-                                                                                                           itemprop="item"
-                                                                                                           title="Xem phim"><span
-                        itemprop="name">Xem Phim</span></a></li>
-            <li itemprop="itemListElement" itemscope="itemscope" itemtype="https://schema.org/ListItem"
-                class="breadcrumb-item"><a itemprop="item"
-                                           href="{{ $currentMovie->getUrl() }}"><span
-                        itemprop="name"> {{ $currentMovie->name }}</span></a></li>
-        </ul>
-    </nav>
-    <section class="video-playlist-player">
-        <div class="container no-line-height pad-top-30 pad-bottom-20">
-            <div class="sub-container">
-                <div class="row">
-                    <div class="col-md-8">
+    <div class="gm-main">
+        <div class="gm-bread">
+            <ol>
+                <li><a href="/">Trang chủ</a></li>
+                <li class="on"> {{ $currentMovie->name }}</li>
+            </ol>
+        </div>
+        <div id="dom-player" class="dplayer dplayer-no-danmaku dplayer-playing dplayer-hide-controller">
+            <div class="dplayer-mask"></div>
+            <div class="dplayer-video-wrap">
+                <div class="dplayer-video dplayer-video-current" id="player-wrapper">
+                </div>
+            </div>
 
-                        <div class="big-card-player-box big-card-169">
-                            <div id="videoPlayer" class="zplayerjs-wrapper player-container">
-                                <div class="video">
-                                    <div id="player-wrapper" data-jwplayer-id="video">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="video-playlist-wrapper pad-top-15" style=" text-align: center">
-                            @foreach ($currentMovie->episodes->where('slug', $episode->slug)->where('server', $episode->server) as $server)
-                                <a onclick="chooseStreamingServer(this)" data-type="{{ $server->type }}"
-                                   id="streaming-sv"
-                                   data-id="{{ $server->id }}"
-                                   data-link="{{ $server->link }}" class="streaming-server tag-link"
-                                   style="background: #232328;color: #FFF">
-                                    Nguồn #{{ $loop->index + 1 }}
-                                </a>
-                            @endforeach
-                        </div>
-                        <div class="video-playlist-wrapper pad-top-15">
-                            <div class="video-actions">
-
-                                <ul class="action-list">
-                                    <li><a class="action" href="#comment"><i
-                                                class="icon ic-comment"></i><span>Bình luận</span></a>
-                                    </li>
-                                </ul>
-
-                            </div>
-                            <p style="margin-bottom:8px">
-                                Nếu bạn bị nhà cung cấp dịch vụ mạng chặn truy cập website chúng tôi, vui lòng tại
-                                kho ứng dụng của <a href="//one.one.one.one/" target="_blank" style="color:orange;">Google</a>
-                                hoặc <a href="//one.one.one.one/" target="_blank" style="color:orange;">App
-                                    Store</a> tải xuống App <a href="//one.one.one.one/" target="_blank"
-                                                               style="color:orange; font-weight:800">1.1.1.1</a> an
-                                toàn và bảo mật để sử dụng
-                            </p>
-                            <div class="artist-profile clearfix" style="">
-                                <div class="detail-star">
-                                    <h3>Đánh giá<small class="pull-right">
-                                            <div>
-                                                ({{$currentMovie->getRatingStar()}}
-                                                sao
-                                                /
-                                                {{$currentMovie->getRatingCount()}} đánh giá)
-                                            </div>
-                                        </small>
-                                    </h3>
-                                    <div class="ewave-star-box center-block">
-                                        <div class="rating-content">
-                                            <div id="movies-rating-star"></div>
-                                            <div id="movies-rating-msg"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="list-episode-servers">
-                                @foreach ($currentMovie->episodes->sortBy([['server', 'asc']])->groupBy('server') as $server => $data)
-                                    <div class="play-detail">
-                                        <div class="list-episodes"><span>{{ $server }}:</span>
-                                            <div class="box-season">
-                                                <div class="tab-pane in active">
-                                                    <ul class="list-episode">
-                                                        @foreach ($data->sortBy('name', SORT_NATURAL)->groupBy('name') as $name => $item)
-                                                            <li class="ng-scope _collection_item"><a
-                                                                    href="{{ $item->sortByDesc('type')->first()->getUrl() }}"
-                                                                    class="@if ($item->contains($episode)) active @endif ">{{ $name }}</a>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <div>
-                                <div class="heading">TỪ KHÓA</div>
-                                <div class="tags-list-movie">  {!! $currentMovie->tags->map(function ($tag) {
-                                                return '<a href="' . $tag->getUrl() . '" title="' . $tag->name . '">' . $tag->name . '</a>';
-                                            })->implode(' ') !!}</div>
-                            </div>
-                            <div id="comment">
-                                <div class="heading">BÌNH LUẬN</div>
-                                <div class="comment-list-wrapper" style="background-color: #FFF !important;">
-                                    <div class="fb-comments w-full" data-href="{{ $currentMovie->getUrl() }}"
-                                         data-width="100%"
-                                         data-numposts="5" data-colorscheme="light" data-lazy="true">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+        </div>
+        <div class="video-info-aux" style="margin-top: 20px;margin-bottom:20px ;text-align: center">
+            @foreach ($currentMovie->episodes->where('slug', $episode->slug)->where('server', $episode->server) as $server)
+                <a onclick="chooseStreamingServer(this)" data-type="{{ $server->type }}"
+                   id="streaming-sv"
+                   data-id="{{ $server->id }}"
+                   data-link="{{ $server->link }}" class="streaming-server tag-link"
+                   style="background: #232328;color: #FFF">
+                    Nguồn #{{ $loop->index + 1 }}
+                </a>
+            @endforeach
+        </div>
+        <div id="dom-source">
+            @foreach ($currentMovie->episodes->sortBy([['server', 'asc']])->groupBy('server') as $server => $data)
+                <div class="source">
+                    <div class="title">
+                        <span class="name">{{ $server }}</span>
                     </div>
-                    <div class="col-md-4">
-                        <aside class="z-video-player-aside">
+                    <div class="list">
+                        @foreach ($data->sortBy('name', SORT_NATURAL)->groupBy('name') as $name => $item)
+                            <a class="@if ($item->contains($episode)) on @endif"
+                               href="{{ $item->sortByDesc('type')->first()->getUrl() }}">{{ $name }}</a>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        </div>
 
-                            <div class="z-aside-header clearfix">
-                                <div class="heading pull-left">PHIM LIÊN QUAN</div>
-                            </div>
-                            <ul class="z-video-130-73-list list-info-mw-150">
-                                @foreach ($movie_related as $movie)
-                                    <li>
-                                        <div class="z-card card-130-73">
-                                            <a class="thumb-130-73"
-                                               href="{{$movie->getUrl()}}">
-                                                <div class=" lazyload-img loaded"><img class="ateslazi"
-                                                                                       src="{{$movie->getPosterUrl()}}"
-                                                                                       data-src="{{$movie->getPosterUrl()}}"
-                                                                                       alt="{{$movie->name}} /{{ $movie->origin_name }}">
-                                                </div>
-                                                <i class="icon ic-svg-play-outline"></i><span
-                                                    class="opac"></span>
-                                            </a>
-                                            <div class="card-info">
-                                                <div class="title"><a class=""
-                                                                      title="Phim Tình Tựa Ánh Hồng / Rainbow Round My Shoulder"
-                                                                      href="{{$movie->getUrl()}}">{{$movie->name}} </a>
-                                                </div>
-                                                <div class="artist"><a class="mr-2" title="Will"
-                                                                       href="{{$movie->getUrl()}}">{{ $movie->origin_name }}</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </aside>
+        <div class="gm-vod">
+            <img class="img" src="{{ $currentMovie->getThumbUrl() }}" alt="{{ $currentMovie->name }}">
+            <div class="more">
+                <h1 class="title"> {{ $currentMovie->name }}</h1>
+                <div class="info">Quốc gia：{!! $currentMovie->regions->map(function ($region) {
+                        return '<a href="' . $region->getUrl() . '" title="' . $region->name . '">' . $region->name . '</a>';
+                    })->implode(', ') !!}</div>
+                <div class="info">Năm：{{ $currentMovie->publish_year }}</div>
+                <div class="info">Đạo diễn：{!! $currentMovie->directors->map(function ($director) {
+                        return '<a href="' . $director->getUrl() . '" title="' . $director->name . '">' . $director->name . '</a>';
+                    })->implode(', ') !!}</p></div>
+                <div class="info">Diễn viên：{!! $currentMovie->actors->map(function ($director) {
+                         return '<a href="' . $director->getUrl() . '" title="' . $director->name . '">' . $director->name . '</a>';
+                     })->implode(', ') !!}</div>
+                <div class="info">
+                    Nội dung：　　 {!! strip_tags($currentMovie->content) !!}
+                </div>
+
+                <div class="info">
+                    @if ($currentMovie->showtimes)
+                        <p>Lịch chiếu : {{$currentMovie->showtimes}}</p>
+                    @endif
+                    @if ($currentMovie->notify )
+                        <p>Thông báo : {{$currentMovie->notify}}</p>
+                    @endif
+                </div>
+            </div>
+            <div class="detail-star">
+                <h3>Đánh giá<small class="pull-right">
+                        <div>
+                            ({{$currentMovie->getRatingStar()}}
+                            sao
+                            /
+                            {{$currentMovie->getRatingCount()}} đánh giá)
+                        </div>
+                    </small>
+                </h3>
+                <div class="ewave-star-box center-block">
+                    <div class="rating-content">
+                        <div id="movies-rating-star"></div>
+                        <div id="movies-rating-msg"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+        <div class="gm-meta"><h4>Bình luận</h4></div>
+        <div class="gm-list">
+            <div style="width: 100%; background-color: #fff">
+                <div class="fb-comments w-full" data-href="{{ $currentMovie->getUrl() }}" data-width="100%"
+                     data-numposts="5" data-colorscheme="light" data-lazy="true">
+                </div>
+            </div>
+        </div>
+        <div class="gm-meta"><h4>Có thể bạn thích</h4></div>
+        <div class="gm-list">
+            @foreach ($movie_related as $movie)
+                @include('themes::themexiaoyakankan.inc.section.movie_card')
+            @endforeach
+        </div>
+    </div>
 
     @push('scripts')
 
