@@ -51,38 +51,15 @@ class ThemexiaoyakankanServiceProvider extends ServiceProvider
                         'tab' => 'List'
                     ],
                     [
-                        'name' => 'home_page_slider_poster',
-                        'label' => 'Home page slider poster',
-                        'type' => 'text',
-                        'hint' => 'Label|relation|find_by_field|value|sort_by_field|sort_algo|limit',
-                        'value' => 'Slide||is_recommended|0|updated_at|desc|12',
-                        'tab' => 'List'
-                    ],
-                    [
                         'name' => 'latest',
                         'label' => 'Home Page',
                         'type' => 'code',
-                        'hint' => 'display_label|relation|find_by_field|value|limit|show_more_url|show_template (section_thumb|section_side)',
+                        'hint' => 'display_label|relation|find_by_field|value|limit|show_more_url',
                         'value' => <<<EOT
-                        Phim chiếu rạp||is_shown_in_theater|1|updated_at|desc|14|/danh-sach/phim-chieu-rap|section_thumb
-                        Phim bộ mới||type|series|updated_at|desc|10|/danh-sach/phim-bo|section_side
-                        Phim lẻ mới||type|single|updated_at|desc|10|/danh-sach/phim-le|section_side
-                        Hoạt hình|categories|slug|hoat-hinh|updated_at|desc|10|/the-loai/hoat-hinh|section_side
-                        EOT,
-                        'attributes' => [
-                            'rows' => 5
-                        ],
-                        'tab' => 'List'
-                    ],
-                    [
-                        'name' => 'hotest',
-                        'label' => 'Sidebar Single',
-                        'type' => 'code',
-                        'hint' => 'Label|relation|find_by_field|value|sort_by_field|sort_algo|limit|show_template (top_text|top_thumb)',
-                        'value' => <<<EOT
-                        Sắp chiếu||status|trailer|publish_year|desc|10|top_text
-                        Top phim lẻ||type|single|view_week|desc|10|top_thumb
-                        Top phim bộ||type|series|view_week|desc|10|top_thumb
+                        Phim chiếu rạp||is_shown_in_theater|1|updated_at|desc|12|/danh-sach/phim-chieu-rap
+                        Phim bộ mới||type|series|updated_at|desc|12|/danh-sach/phim-bo
+                        Phim lẻ mới||type|single|updated_at|desc|12|/danh-sach/phim-le
+                        Hoạt hình|categories|slug|hoat-hinh|updated_at|desc|12|/the-loai/hoat-hinh
                         EOT,
                         'attributes' => [
                             'rows' => 5
@@ -100,7 +77,7 @@ class ThemexiaoyakankanServiceProvider extends ServiceProvider
                         'name' => 'body_attributes',
                         'label' => 'Body attributes',
                         'type' => 'text',
-                        'value' => 'class="phim7s"',
+                        'value' => '',
                         'tab' => 'Custom CSS'
                     ],
                     [
