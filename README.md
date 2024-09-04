@@ -21,19 +21,19 @@ https://github.com/hacoidev/ophim-core
     + `Reset` reset lại toàn bộ cấu hình của themes
 ## Demo
 ### Trang Chủ
-![Alt text](https://i.ibb.co/RP4Zsr7/image.png "Home Page")
+![Alt text](https://i.ibb.co/DLYW0cc/image.png "Home Page")
 
 ### Trang Danh Sách Phim
 
-![Alt text](https://i.ibb.co/1mBvf1b/image.png "Catalog Page")
+![Alt text](https://i.ibb.co/NVJQ91P/image.png "Catalog Page")
 
 ### Trang Thông Tin Phim
 
-![Alt text](https://i.ibb.co/QNmtFyG/image.png "Info Page")
+![Alt text](https://i.ibb.co/4ZRkMWf/image.png "Info Page")
 
 ### Trang Xem Phim
 
-![Alt text](https://i.ibb.co/2W68S48/image.png "Episode Page")
+![Alt text](https://i.ibb.co/CMp7gZg/image.png "Episode Page")
 
 ### Custom View Blade
 - File blade gốc trong Package: `/vendor/ophimcms/theme-xiaoyakankan/resources/views/themexiaoyakankan`
