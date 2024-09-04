@@ -15,201 +15,100 @@
     }
 @endphp
 @section('content')
-    <nav class="bg-page">
-        <ul id="breadcrumb" itemscope="itemscope" itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope="itemscope" itemtype="https://schema.org/ListItem"><a href="/"
-                                                                                                           itemprop="item"
-                                                                                                           title="Xem phim"><span
-                        itemprop="name">Xem Phim</span></a></li>
-            <li itemprop="itemListElement" itemscope="itemscope" itemtype="https://schema.org/ListItem"
-                class="breadcrumb-item"><a itemprop="item"
-                                           href="{{ $currentMovie->getUrl() }}"><span
-                        itemprop="name"> {{ $currentMovie->name }}</span></a></li>
-        </ul>
-    </nav>
-    <main id="main-body" class="bg-page" itemscope="" itemtype="https://schema.org/Movie">
-        <div>
-            <section class="info-banner-box">
-                <div class="container">
-                    <div class="blur-container"
-                         style="background: url({{ $currentMovie->getPosterUrl() }}) center center / cover no-repeat rgb(110, 97, 78); opacity: 0.3;"></div>
-                    <img id="song-thumbnail-temp" hidden="" class="ateslazi"
-                         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                         data-src="{{ $currentMovie->getThumbUrl() }}" width="240" alt=" {{ $currentMovie->name }}">
-                    <div class="sub-container clearfix" itemprop="potentialAction" itemscope=""
-                         itemtype="https://schema.org/WatchAction">
-                        <a class="medium-card-11" href="{{ $watch_url }}" itemprop="target">
-                            <img class="ateslazi" src="{{ $currentMovie->getThumbUrl() }}"
-                                 data-src="{{ $currentMovie->getThumbUrl() }}"
-                                 alt=" {{ $currentMovie->name }}">
-                            <i class="icon ic-svg-play-outline"></i>
-                        </a>
-                        <div class="info-banner-body clearfix">
-                            <div class="left-info">
-                                <div class="ranking"></div>
-                                <h1 itemprop="name"><span class="text-upper "> {{ $currentMovie->name }}</span></h1>
-                                <div class="artist-name">
-                                    <h2 itemprop="name">{{$currentMovie->origin_name}}
-                                        ({{ $currentMovie->publish_year }})</h2>
-                                </div>
-                                <div class="subtext release">Trạng thái: <span
-                                        style="color:#63c0ac"><b>{{$currentMovie->getStatus()}} {{ $currentMovie->language }}</b></span>
-                                </div>
-                                <div class="subtext release">Đạo diễn:{!! $currentMovie->directors->map(function ($director) {
-                        return '<a href="' . $director->getUrl() . '" title="' . $director->name . '">' . $director->name . '</a>';
-                    })->implode(', ') !!}</div>
-                                <div class="subtext release">Diễn viên: {!! $currentMovie->actors->map(function ($director) {
-                         return '<a href="' . $director->getUrl() . '" title="' . $director->name . '">' . $director->name . '</a>';
-                     })->implode(', ') !!}</div>
-                                <div class="subtext release">Quốc Gia: {!! $currentMovie->regions->map(function ($region) {
+    <style>
+        .xemphim {
+            float: left;
+            padding: 0 10px;
+            border-radius: 17px;
+            background-color: #f8f8f8;
+            font-size: 13px;
+            line-height: 32px;
+            height: 32px;
+            text-decoration: none;
+            background: linear-gradient(90deg, #ffb821 0, #d9534f 45%, #ff1459);
+            background-color: #ff183e;
+            color: #fff;
+            margin-left: 10px;
+        }
+    </style>
+    <div class="gm-main">
+        <div class="gm-bread">
+            <ol>
+                <li><a href="/">Trang chủ</a></li>
+                <li class="on"> {{ $currentMovie->name }}</li>
+            </ol>
+        </div>
+
+        <div class="gm-vod">
+            <img class="img" src="{{ $currentMovie->getThumbUrl() }}" alt="{{ $currentMovie->name }}">
+            <div class="more">
+                <h1 class="title"> {{ $currentMovie->name }}</h1>
+                <div class="info">Quốc gia：{!! $currentMovie->regions->map(function ($region) {
                         return '<a href="' . $region->getUrl() . '" title="' . $region->name . '">' . $region->name . '</a>';
                     })->implode(', ') !!}</div>
-                                <div class="subtext release">Năm sản xuất: {{ $currentMovie->publish_year }} | Thời
-                                    lượng: {{$currentMovie->episode_time}}
-                                </div>
-                            </div>
-                            <div class="myui-panel_bd">
-                                @if ($currentMovie->showtimes)
-                                    <p>Lịch chiếu : {{$currentMovie->showtimes}}</p>
-                                @endif
-                                @if ($currentMovie->notify )
-                                    <p>Thông báo :  {{$currentMovie->notify}}</p>
-                                @endif
-                            </div>
-                            <div class="right-info">
-                                <div class="log-stats">
-                                    <div class="viewed"><i class="icon ic-play"></i> {{$currentMovie->view_total}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="info">Năm：{{ $currentMovie->publish_year }}</div>
+                <div class="info">Đạo diễn：{!! $currentMovie->directors->map(function ($director) {
+                        return '<a href="' . $director->getUrl() . '" title="' . $director->name . '">' . $director->name . '</a>';
+                    })->implode(', ') !!}</p></div>
+                <div class="info">Diễn viên：{!! $currentMovie->actors->map(function ($director) {
+                         return '<a href="' . $director->getUrl() . '" title="' . $director->name . '">' . $director->name . '</a>';
+                     })->implode(', ') !!}</div>
+                <div class="info">
+                    Nội dung：　　  {!! strip_tags($currentMovie->content) !!}
                 </div>
-            </section>
-            <section class="user-interaction-box">
-                <div class="container">
-                    <div class="sub-container">
-                        <div class="user-interaction-wrapper">
-                            <ul class="action-list">
-                                <li itemprop="potentialAction" itemscope="" itemtype="https://schema.org/WatchAction"><a
-                                        class="action watch" href="{{ $watch_url }}" itemprop="target"><i
-                                            class="icon ic-play"></i> Xem ngay</a></li>
-                                @if ($currentMovie->trailer_url && strpos($currentMovie->trailer_url, 'youtube'))
-                                    @php
-                                        parse_str( parse_url( $currentMovie->trailer_url, PHP_URL_QUERY ), $my_array_of_vars );
-                                        $video_id = $my_array_of_vars['v'] ?? null;
-                                    @endphp
-                                    <li itemprop="potentialAction" itemscope=""
-                                        itemtype="https://schema.org/WatchAction"><a
-                                            class="action watch fancybox fancybox.iframe"
-                                            href="https://www.youtube.com/embed/{{$video_id}}" itemprop="target"><i
-                                                class="icon ic-play"></i> Trailer</a></li>
-                                @endif
 
-                                <li><a class="action"><i class="icon ic-imdb"></i> <span
-                                            style="color:#ffd500">N/A</span></a></li>
-                                <li><a class="action"><i class="icon ic-calendar"></i> Lịch Chiếu: <span>N/A</span></a>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </div>
+                <div class="info">
+                    @if ($currentMovie->showtimes)
+                        <p>Lịch chiếu : {{$currentMovie->showtimes}}</p>
+                    @endif
+                    @if ($currentMovie->notify )
+                        <p>Thông báo :  {{$currentMovie->notify}}</p>
+                    @endif
                 </div>
-            </section>
-            <section class="info-player-details-box">
-                <div class="container">
-                    <div class="sub-container">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="artist-profile clearfix" style="">
-                                    <div class="detail-star">
-                                        <h3>Đánh giá<small class="pull-right">
-                                                <div>
-                                                    <div>
-                                                        ({{$currentMovie->getRatingStar()}}
-                                                        sao
-                                                        /
-                                                        {{$currentMovie->getRatingCount()}} đánh giá)
-                                                    </div>
-                                                </div>
-                                            </small>
-                                        </h3>
-                                        <div class="ewave-star-box center-block">
-                                            <div class="rating-content">
-                                                <div id="movies-rating-star"></div>
-                                                <div id="movies-rating-msg"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="lyrics-wrapper">
-                                    <div class="heading">NỘI DUNG PHIM</div>
-                                    <div class="lyrics-text" itemprop="description">
-                                        <div>
-                                            {!! strip_tags($currentMovie->content) !!}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="heading">TỪ KHÓA</div>
-                                    <div class="tags-list-movie">
-                                        {!! $currentMovie->tags->map(function ($tag) {
-                                                return '<a href="' . $tag->getUrl() . '" title="' . $tag->name . '">' . $tag->name . '</a>';
-                                            })->implode(' ') !!}
-                                    </div>
-                                </div>
-                                <div id="comment">
-                                    <div class="heading">BÌNH LUẬN</div>
-                                    <div class="comment-list-wrapper" style="background-color: #FFF !important;">
-                                        <div class="fb-comments w-full" data-href="{{ $currentMovie->getUrl() }}"
-                                             data-width="100%"
-                                             data-numposts="5" data-colorscheme="light" data-lazy="true">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <aside class="z-video-player-aside">
-                                    <div class="z-aside-header clearfix">
-                                        <div class="heading pull-left">PHIM LIÊN QUAN</div>
-                                    </div>
-                                    <ul class="z-video-130-73-list list-info-mw-150">
-                                        @foreach ($movie_related as $movie)
-                                            <li>
-                                                <div class="z-card card-130-73">
-                                                    <a class="thumb-130-73"
-                                                       href="{{$movie->getUrl()}}">
-                                                        <div class=" lazyload-img loaded"><img class="ateslazi"
-                                                                                               src="{{$movie->getPosterUrl()}}"
-                                                                                               data-src="{{$movie->getPosterUrl()}}"
-                                                                                               alt="{{$movie->name}} /{{ $movie->origin_name }}">
-                                                        </div>
-                                                        <i class="icon ic-svg-play-outline"></i><span
-                                                            class="opac"></span>
-                                                    </a>
-                                                    <div class="card-info">
-                                                        <div class="title"><a class=""
-                                                                              title="Phim Tình Tựa Ánh Hồng / Rainbow Round My Shoulder"
-                                                                              href="{{$movie->getUrl()}}">{{$movie->name}} </a>
-                                                        </div>
-                                                        <div class="artist"><a class="mr-2" title="Will"
-                                                                               href="{{$movie->getUrl()}}">{{ $movie->origin_name }}</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </aside>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                @if($watch_url)
+                <a class="xemphim" href="{{ $watch_url }}">Xem phim</a>
+                @endif
+                @if ($currentMovie->trailer_url && strpos($currentMovie->trailer_url, 'youtube'))
+                    @php
+                        parse_str( parse_url( $currentMovie->trailer_url, PHP_URL_QUERY ), $my_array_of_vars );
+                        $video_id = $my_array_of_vars['v'] ?? null;
+                    @endphp
+                    <a class="xemphim fancybox fancybox.iframe" href="https://www.youtube.com/embed/{{$video_id}}">Trailer</a>
+                @endif
+            </div>
         </div>
-    </main>
+        <div class="detail-star">
+            <h3>Đánh giá<small class="pull-right">
+                    <div>
+                        ({{$currentMovie->getRatingStar()}}
+                        sao
+                        /
+                        {{$currentMovie->getRatingCount()}} đánh giá)
+                    </div>
+                </small>
+            </h3>
+            <div class="ewave-star-box center-block">
+                <div class="rating-content">
+                    <div id="movies-rating-star"></div>
+                    <div id="movies-rating-msg"></div>
+                </div>
+            </div>
+        </div>
+        <div class="gm-meta"><h4>Bình luận</h4></div>
+        <div class="gm-list">
+            <div style="width: 100%; background-color: #fff">
+                <div class="fb-comments w-full" data-href="{{ $currentMovie->getUrl() }}" data-width="100%"
+                     data-numposts="5" data-colorscheme="light" data-lazy="true">
+                </div>
+            </div>
+        </div>
+        <div class="gm-meta"><h4>Có thể bạn thích</h4></div>
+        <div class="gm-list">
+            @foreach ($movie_related as $movie)
+                @include('themes::themexiaoyakankan.inc.section.movie_card')
+            @endforeach
+        </div>
+    </div>
 
     @push('scripts')
         <script src="{{ asset('/themes/xiaoyakankan/plugins/jquery-raty/jquery.raty.js') }}"></script>
