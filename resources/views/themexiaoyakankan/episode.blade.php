@@ -223,27 +223,27 @@
                         fake_player.setup(objSetupFake);
                         fake_player.on('complete', function (event) {
                             $("#fake_jwplayer").remove();
-                            wrapper.innerHTML = `<iframe width="100%" height="100%" src="${link}" frameborder="0" scrolling="no"
+                            wrapper.innerHTML = `<iframe width="100%" height="400px" src="${link}" frameborder="0" scrolling="no"
                     allowfullscreen="" allow='autoplay'></iframe>`
                             fake_player.remove();
                         });
 
                         fake_player.on('adSkipped', function (event) {
                             $("#fake_jwplayer").remove();
-                            wrapper.innerHTML = `<iframe width="100%" height="100%" src="${link}" frameborder="0" scrolling="no"
+                            wrapper.innerHTML = `<iframe width="100%" height="400px" src="${link}" frameborder="0" scrolling="no"
                     allowfullscreen="" allow='autoplay'></iframe>`
                             fake_player.remove();
                         });
 
                         fake_player.on('adComplete', function (event) {
                             $("#fake_jwplayer").remove();
-                            wrapper.innerHTML = `<iframe width="100%" height="100%" src="${link}" frameborder="0" scrolling="no"
+                            wrapper.innerHTML = `<iframe width="100%" height="400px" src="${link}" frameborder="0" scrolling="no"
                     allowfullscreen="" allow='autoplay'></iframe>`
                             fake_player.remove();
                         });
                     } else {
                         if (wrapper) {
-                            wrapper.innerHTML = `<iframe width="100%" height="100%" src="${link}" frameborder="0" scrolling="no"
+                            wrapper.innerHTML = `<iframe width="100%" height="400px" src="${link}" frameborder="0" scrolling="no"
                     allowfullscreen="" allow='autoplay'></iframe>`
                         }
                     }

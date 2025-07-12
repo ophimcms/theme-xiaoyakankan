@@ -65,8 +65,26 @@
                         <p>Thông báo :  {{$currentMovie->notify}}</p>
                     @endif
                 </div>
+                <div class="detail-star">
+                    <h3>Đánh giá<small class="pull-right">
+                            <div>
+                                ({{$currentMovie->getRatingStar()}}
+                                sao
+                                /
+                                {{$currentMovie->getRatingCount()}} đánh giá)
+                            </div>
+                        </small>
+                    </h3>
+                    <div class="ewave-star-box center-block">
+                        <div class="rating-content">
+                            <div id="movies-rating-star"></div>
+                            <div id="movies-rating-msg"></div>
+                        </div>
+                    </div>
+                </div>
+
                 @if($watch_url)
-                <a class="xemphim" href="{{ $watch_url }}">Xem phim</a>
+                    <a class="xemphim" href="{{ $watch_url }}" style="margin-left: 0;">Xem phim</a>
                 @endif
                 @if ($currentMovie->trailer_url && strpos($currentMovie->trailer_url, 'youtube'))
                     @php
@@ -77,23 +95,7 @@
                 @endif
             </div>
         </div>
-        <div class="detail-star">
-            <h3>Đánh giá<small class="pull-right">
-                    <div>
-                        ({{$currentMovie->getRatingStar()}}
-                        sao
-                        /
-                        {{$currentMovie->getRatingCount()}} đánh giá)
-                    </div>
-                </small>
-            </h3>
-            <div class="ewave-star-box center-block">
-                <div class="rating-content">
-                    <div id="movies-rating-star"></div>
-                    <div id="movies-rating-msg"></div>
-                </div>
-            </div>
-        </div>
+
         <div class="gm-meta"><h4>Bình luận</h4></div>
         <div class="gm-list">
             <div style="width: 100%; background-color: #fff">

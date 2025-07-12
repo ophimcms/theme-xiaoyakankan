@@ -1,24 +1,21 @@
 # THEME - xiaoyakankan 2024 - OPHIM CMS
 
-## Install
-
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/ophimcms/theme-xiaoyakankan.git"
-        }
-    ],
-    "require": {
-    "ophimcms/theme-xiaoyakankan": "*"
-    }
-1. Tại thư mục của Project: `composer update`
-2. Kích hoạt giao diện trong Admin Panel
 ## Requirements
 https://github.com/hacoidev/ophim-core
+
+## Install
+1. Tại thư mục của Project: `composer require ophimcms/theme-xiaoyakankan`
+2. Kích hoạt giao diện trong Admin Panel
+
+## Update
+1. Tại thư mục của Project: `composer update ophimcms/theme-xiaoyakankan`
+2. Re-Activate giao diện trong Admin Panel
+
 ## Note
 - Một vài lưu ý quan trọng của các nút chức năng:
     + `Activate` và `Re-Activate` sẽ publish toàn bộ file js,css trong themes ra ngoài public của laravel.
     + `Reset` reset lại toàn bộ cấu hình của themes
+
 ## Demo
 ### Trang Chủ
 ![Alt text](https://i.ibb.co/DLYW0cc/image.png "Home Page")
